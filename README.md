@@ -1,4 +1,4 @@
 log4j_popcorn_appender
 ======================
 
-Log4J Popcorn Appender
+To test use Test.java with -Dlog4j.configurationFile=test/org/popcorn/test/log4j.xml as a VM argument.

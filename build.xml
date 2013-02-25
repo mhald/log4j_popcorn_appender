@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="Log4j Popcorn Appender" default="all" basedir=".">
+    <property file="build.properties"/>
+    
+    <path id="popcorn.classpath">
+        <pathelement path="${classes.dir}"/>
+        <pathelement path="${log4j.api.jar}"/>
+        <pathelement path="${log4j.core.jar}"/>
+        <pathelement path="${protobuffs.jar}"/>
+    </path>
+    
+    <target name="init">
+        <mkdir dir="${classes.dir}"/>
+    </target>
+        
+	<target name="protobuff_bindings" description="creates the protobuff java bindinds">
+		<!-- added the exec call to protobuffs -->
+		<!-- protoc -I=src DASHDASHjava_out=src src/org/popcorn/log4j/PopcornPacket.proto -->
+	</target>
+		
+    <target name="log4j_dat" description="creates database tables" >
+    	<java classname="org.apache.logging.log4j.core.config.plugins.PluginManager"
+    		>
+    		<arg value="src"/>
+    		<arg value="org.popcorn.log4j"/>
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <pathelement location="${log4j.api.jar}"/>
+                <pathelement location="${log4j.core.jar}"/>
+            </classpath>
+    	</java>
+    	<echo>Generated Popcorn Log4j DAT file</echo>
+    </target>
+    
+    <target name="compile" depends="init" description="compiles common, server, client " >
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="popcorn.classpath"/>
+    	<copy todir="${classes.dir}">
+    		<fileset dir="src" includes="**/Log4j2Plugins.dat"></fileset>
+    	</copy>
+    	<echo>Compiled Popcorn Log4J Connector</echo>
+    </target>
+    
+    <target name="clean" description="cleans all class files" >
+        <delete dir="${classes.dir}"/>
+    	<echo>Cleaned class files</echo>
+    </target>
+    
+    <target name="all" depends="clean, compile, log4j_dat, jar">
+    </target>  
+	
+	<target name="jar" description="create the releasable JAR file">
+		<jar destfile="log4j-popcorn.jar" basedir="classes">
+		</jar>
+	</target>
+
+    <target name="help" description="gives natural order of targets" >
+        <echo message="1. clean        cleans all class files"/>
+        <echo message="2. compile      compiles Java"/>
+        <echo message="3. log4j_dat    generate log4j DAT file"/>
+    </target>  
+</project>

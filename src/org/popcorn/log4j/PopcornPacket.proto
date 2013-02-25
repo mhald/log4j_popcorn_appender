@@ -1,0 +1,17 @@
+package org.popcorn.log4j;
+
+option java_package = "org.popcorn.log4j";
+option java_outer_classname = "PopcornProtos";
+
+message PopcornPacket {
+   required uint32 packetV = 1;
+   required string node = 2;
+   required string role = 3;
+   required string version = 4;
+   required uint32 level = 5;
+   required string message = 6;
+   required string module = 7;
+   required string funcName = 8;
+   required string line = 9;
+   optional string pid = 10;
+}
